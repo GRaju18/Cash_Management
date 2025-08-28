@@ -1,0 +1,104 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc" height="100%"  xmlns:f="sap.f">
+	<Dialog contentWidth="{= ${device>/system/desktop} ? '50rem':'auto'}" class="sapUiSizeCompact iconDialog waterDialog" horizontalScrolling="false" draggable="true">
+		<customHeader>
+			<Bar>
+				<contentMiddle>
+					<!--<Avatar displaySize="S" showBorder="true" imageFitType="Contain" displayShape="Circle" src="./images/icons/Treat.png" backgroundColor="Random" class="sapUiTinyMarginBeginEnd sapUiTinyMarginBottom"/> -->
+				<Label text="Treating Wizard" design="Bold"/>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+		<FlexBox class="sapUiSmallMargin  wateringFlex" >
+		<f:GridContainer>
+					<f:layout>
+						<f:GridContainerSettings rowSize="1rem" columnSize="11rem" gap="8px"/>
+					</f:layout>
+					<f:layoutXS>
+						<f:GridContainerSettings rowSize="1rem" columnSize="11rem" gap="8px"/>
+					</f:layoutXS>
+				<VBox class="sapUiSmallMarginBegin">
+					<Label text="Treat Distribution:"/>
+					<ComboBox id="td" width="11rem">
+						<items>
+							<core:Item text="Per Plant" key="P"></core:Item>
+							<core:Item text="Evenly Distributed" key="E"></core:Item>
+						</items>
+					</ComboBox>
+				</VBox> 
+				<VBox class="sapUiSmallMarginBegin">
+					<Label text="Treat Type:"/>
+					<ComboBox id="tt" width="11rem">
+						<items>
+							<core:Item text="Liquid" key="Liquid"></core:Item>
+							<core:Item text="Spray" key="Spray"></core:Item>
+							<core:Item text="Solid" key="Solid"></core:Item>
+						</items>
+					</ComboBox>
+				</VBox> 
+				<VBox class="sapUiSmallMarginBegin">
+					<Label text="Repellent Name:"></Label>
+					<HBox>
+						<Input id="rpl" change="onPhValueChange" width="11rem"/>
+					</HBox>
+				</VBox> 
+				<VBox class="sapUiSmallMarginBegin">
+					<Label text="Amount:"></Label>
+					<HBox>
+						<Input id="amount" width="6rem"></Input>
+						<ComboBox id="unit" width="5rem">
+							<items>
+								<core:Item text="ml" key="ml"></core:Item>
+								<core:Item text="gal" key="gal"></core:Item>
+								<core:Item text="l" key="l"></core:Item>
+								<core:Item text="cups" key="cups"></core:Item>
+								<core:Item text="fl. Oz" key="floz"></core:Item>
+								<core:Item text="pint" key="pint"></core:Item>
+								<core:Item text="quart" key="quart"></core:Item>
+								<core:Item text="tbsp" key="tbsp"></core:Item>
+								<core:Item text="tsp" key="tsp"></core:Item>
+							</items>
+						</ComboBox>
+					</HBox>
+				</VBox>  
+				</f:GridContainer> 
+		</FlexBox>
+		<FlexBox class="wateringFlexTable" direction="Column">
+			<Table inset="true" id="treatTable" width="auto" mode="MultiSelect" items="{path:'ChartModel>/wateringTableData'}">
+				<headerToolbar>
+					<Toolbar>
+						<Text id="treatCount" text="Items"/>
+						<ToolbarSpacer/>
+						<Button text="Remove" type="Reject" press="removeTreatSelectedEntry"></Button>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column popinDisplay="Inline">
+						<Label text="Plant ID" design="Bold"/>
+					</Column>
+					<Column minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+						<Label text="Plant Name" design="Bold"/>
+					</Column>
+					<Column popinDisplay="Inline">
+						<Label text="Cubes Room" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem >
+						<cells>
+							<Text text="{ChartModel>NPLID}"/>
+							<Text text="{ChartModel>NPFNM}"/>
+							<Text text="{ChartModel>NROOM}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</FlexBox>
+		<beginButton>
+		<Button id="seachBtn" text="Go" type="Accept" press="applyTreat" width="5rem"/>
+		</beginButton>
+		<endButton>
+			<Button text="Close" type="Reject" width="5rem" press="onTreatClose"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

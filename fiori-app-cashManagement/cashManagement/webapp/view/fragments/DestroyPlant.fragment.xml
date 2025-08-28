@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog contentWidth="23rem" class="sapUiSizeCompact" stretch="{device>/system/phone}" draggable="true"  busy="{jsonModel>/busyView}">
+		<customHeader>
+			<Bar>
+				<contentMiddle>
+					<Label text="Confirmation"/>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<Text text="Are you sure you want to Destroy these plants?" class="confirmText"/>
+				<VBox class="sapUiSmallMarginTop">
+					<Label text="Quantity" required="true"/>
+					<Input type="Number" width="100%" id="quantity"/>
+				</VBox>
+				<VBox class="sapUiSmallMarginTop">
+					<Label text="Reason/Notes" required="true"/>
+					<TextArea width="100%" id="note"/>
+				</VBox>
+			</VBox>
+		</content>
+		<beginButton>
+			<Button type="Emphasized" text="OK" press="onDestroyPlant"></Button>
+		</beginButton>
+		<endButton>
+			<Button type="Transparent" text="Close" press="onDestroyClose" tooltip="Close"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,90 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:uxap="sap.uxap" xmlns:mvc="sap.ui.core.mvc"
+	height="100%" xmlns:barcode="com.9b.cashManagement.control">
+	<Dialog class="sapUiSizeCompactDia" draggable="true" contentWidth="{= ${device>/system/desktop} ? '25rem':'auto'}" title="Harvest"
+		busy="{jsonModel>/busyView}">
+		<content>
+			<uxap:ObjectPageLayout showHeaderContent="{= !!${jsonModel>/showHeaderHarvest} }" busy="{jsonModel>/showBusy}"
+				toggleHeaderOnTitleClick="{= !!${jsonModel>/showHeaderHarvest} }" upperCaseAnchorBar="false">
+				<uxap:headerTitle>
+					<uxap:ObjectPageDynamicHeaderTitle>
+						<uxap:heading>
+							<Input id="barcode" submit="bulkHarvestTagScan" width="16rem" placeholder="Scan or Enter Harvest Name"/>
+						</uxap:heading>
+					</uxap:ObjectPageDynamicHeaderTitle>
+				</uxap:headerTitle>
+				<uxap:sections>
+					<uxap:ObjectPageSection showTitle="false" visible="{jsonModel>/showMessagePage}">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
+								<MessagePage showHeader="false" icon="sap-icon://tags" text="{jsonModel>/scanTextHarvest}" description=""/>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+					<uxap:ObjectPageSection showTitle="false" visible="{= !${jsonModel>/showMessagePage}}">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection>
+								<HBox>
+									<VBox width="100%" justifyContent="SpaceBetween">
+										<Label text="Item" design="Bold"/>
+										<Select id="harvstItem" width="100%" items="{path: 'jsonModel>/itemList'}" forceSelection="true" editable="false"
+											selectedKey="{jsonModel>/bulkHarvestObj/harvestItem}">
+											<items>
+												<core:Item key="{jsonModel>ItemCode}-{jsonModel>ProdStdCost}" text="{jsonModel>ItemName}"/>
+											</items>
+										</Select>
+										<Label text="Available Plants" design="Bold"/>
+										<Input width="100%" editable="false" value="{jsonModel>/bulkHarvestObj/avPlants}"/>
+										<Label text="No. of Plants" design="Bold"/>
+										<Input width="100%" editable="true" liveChange="onPlantCountChange" value="{jsonModel>/bulkHarvestObj/NoOfPlants}"/>
+										<Label text="Harvest Name" design="Bold"/>
+										<Input width="100%" value="{jsonModel>/bulkHarvestObj/enteredHarvest}" change="bulkHarvestNameChange"/>
+										<Label text="Cart" design="Bold"/>
+										<Input width="100%" selectedKey="{jsonModel>/bulkHarvestObj/sCartKey}" suggestionItems="{path: 'jsonModel>/cartMasterData'}"
+											showSuggestion="true" value="{jsonModel>/bulkHarvestObj/cartName}" change="validateSuggetion">
+											<suggestionItems>
+												<core:Item key="{jsonModel>U_WEIGHT}" text="{jsonModel>Name}"/>
+											</suggestionItems>
+										</Input>
+										<Label text="Cart Weight (lb)" design="Bold"/>
+										<Input width="100%" type="Number" editable="false" value="{jsonModel>/bulkHarvestObj/sCartKey}"/>
+										<Label text="Hanger Type" design="Bold"/>
+										<Input width="100%" selectedKey="{jsonModel>/bulkHarvestObj/hgrType}" suggestionItems="{path: 'jsonModel>/hagrTypeMasterData'}"
+											showSuggestion="true" value="{jsonModel>/bulkHarvestObj/hangerType}" change="validateSuggetion">
+											<suggestionItems>
+												<core:Item key="{jsonModel>U_WEIGHT}" text="{jsonModel>Name}"/>
+											</suggestionItems>
+										</Input>
+										<Label text="No. of hangers" design="Bold"/>
+										<Input width="100%" type="Number" value="{jsonModel>/bulkHarvestObj/noOfHgrs}" change="onSelectHgrs"/>
+										<Label text="Hanger Weight" design="Bold"/>
+										<Input width="100%" editable="false" value="{jsonModel>/bulkHarvestObj/fHangerWt}"/>
+										<Label text="Gross Wgt (lb)" design="Bold"/>
+										<TextArea class="weightInput" width="100%" rows="1" liveChange="onWtLiveChange" value="{jsonModel>/bulkHarvestObj/wetWight}"/>
+										<Label text="Net Wgt (lb)" design="Bold"/>
+										<Input width="100%" editable="false" value="{jsonModel>/bulkHarvestObj/fWetWt}"/>
+										<Label design="Bold" text="Location"/>
+										<Select id="sRoom" width="100%" items="{path: 'jsonModel>/harvestLicenseList',sorter : { path : 'BinCode', descending : false }}"
+											busy="{jsonModel>/hLocationBusy}" change="bulkHarvestLocationChange" forceSelection="false" selectedKey="{jsonModel>/bulkHarvestObj/harvestRoom}">
+											<items>
+												<core:Item key="{jsonModel>Warehouse}-{jsonModel>AbsEntry}-{jsonModel>BinCode}" text="{jsonModel>BinCode}"/>
+											</items>
+										</Select>
+										<!--	<Label text="Labor (hrs):" design="Bold"/>
+										<Input width="100%" id="laborHrs" type="Number"/>-->
+									</VBox>
+								</HBox>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+				</uxap:sections>
+			</uxap:ObjectPageLayout>
+		</content>
+		<beginButton>
+			<Button id="seachBtn" text="Harvest Plants" press="postBulkHarvestData"
+				type="Emphasized"></Button>
+		</beginButton>
+		<endButton>
+			<Button text="Close" type="Transparent" press="onHarvestClose" width="5rem"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

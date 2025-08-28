@@ -1,0 +1,38 @@
+_schema-version: "3.2"
+ID: ext-fiori-cashManagement-app
+version: 0.0.1
+provider: SAP
+modules:
+- name: ext-cashManagement-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ext-cashManagement-html5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - sapb1cashManagement.zip
+      name: sapb1cashManagement
+      target-path: resources/
+- name: sapb1cashManagement
+  type: html5
+  path: cashManagement
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ext-cashManagement-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ext-cashManagement-html5-app-host-service
+    service-plan: app-host
+parameters:
+  deploy_mode: b1-webclient

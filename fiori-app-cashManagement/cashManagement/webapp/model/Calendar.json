@@ -1,0 +1,30 @@
+
+{
+	"title": "Team Calendar",
+	"startDate": "2019-10-01T08:00:00",
+	"viewKey":	"OneMonth",
+	"supportedAppointmentItems": [
+		{
+			"text": "Team meeting",
+			"type": "Type01"
+		},
+		{
+			"text": "Personal",
+			"type": "Type05"
+		},
+		{
+			"text": "Discussions",
+			"type": "Type08"
+		},
+		{
+			"text": "Out of office",
+			"type": "Type09"
+		},
+		{
+			"text": "Private meeting",
+			"type": "Type03"
+		}
+	],
+	"team": [ 
+	]
+}

@@ -1,0 +1,37 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" height="100%"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog class="sapUiSizeCompact" contentWidth="{= ${device>/system/desktop} ? '32rem':'auto'}" title="Manicure Plant"
+		horizontalScrolling="false" draggable="true" busy="{jsonModel>/busy}">
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12"
+				adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+				singleContainerFullSize="false">
+				<f:content>
+					<Label text="Selected Plant Count"/>
+					<Input value="{jsonModel>/manicureObj/manicurePlantCount}" editable="false"/>
+					<Label text="METRC UID"/>
+					<Input value="{jsonModel>/manicureObj/tableData/BatchNum}" editable="false"/>
+					<Label text="Item"/>
+					<Input value="{jsonModel>/manicureObj/ItemName}" editable="false"/>
+					<Label text="Harvest Name"/>
+					<Input value="{jsonModel>/manicureObj/HarvestName}" change="validateHarvestName" valueState="{jsonModel>/manicureObj/isHarvestNameValid}"/>
+					<Label text="Net Wgt (lb)"/>
+					<Input value="{jsonModel>/manicureObj/NetWt}" type="Number"/>
+					<Label text="Location"/>
+					<Select id="sRoom" width="100%" items="{path: 'jsonModel>/harvestLicenseList',sorter : { path : 'BinCode', descending : false }}"
+						busy="{jsonModel>/hLocationBusy}" forceSelection="false" selectedKey="{jsonModel>/manicureObj/location}">
+						<items>
+							<core:Item key="{jsonModel>BinCode}" text="{jsonModel>BinCode}"/>
+						</items>
+					</Select>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<beginButton>
+			<Button text="Manicure Plant" press="postManicureData" type="Emphasized"/>
+		</beginButton>
+		<endButton>
+			<Button text="Cancel" type="Transparent" press="onManicureClose"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

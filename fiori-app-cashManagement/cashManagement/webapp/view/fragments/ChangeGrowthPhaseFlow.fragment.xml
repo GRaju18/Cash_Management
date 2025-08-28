@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog contentWidth="24rem" class="sapUiSizeCompact" stretch="{device>/system/phone}" draggable="true">
+		<customHeader>
+			<Bar>
+				<contentMiddle>
+					<Label text="Change Growth Phase"/>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+		<content>
+			<FlexBox direction="Column">
+				<InputListItem label="Select Growth Phase">
+					<Select id="growthPhase" width="12rem" forceSelection="false">
+						<core:Item key="Harvesting" text="Harvesting"/>
+					</Select>
+				</InputListItem>
+			</FlexBox>
+		</content>
+		<beginButton>
+			<Button type="Emphasized" text="Ok" press="handleGoSelect"></Button>
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onCloseGrowthPhase" tooltip="Close"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

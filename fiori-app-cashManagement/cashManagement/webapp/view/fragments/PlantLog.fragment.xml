@@ -1,0 +1,120 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:table="sap.ui.table">
+	<Dialog class="sapUiSizeCompact iconDialog waterDialog" contentWidth="{= ${device>/system/desktop} ? '50rem':'auto'}" draggable="true">
+		<customHeader>
+			<Bar>
+					<!--<contentLeft>-->
+					<!--	<Avatar src="./images/icons/Plant.png" backgroundColor="Random" class="sapUiTinyMarginEnd"/> -->
+					<!--</contentLeft>-->
+				<contentLeft>
+				<Label text="Plant Log Details - {NPLID}" design="Bold"/>
+				</contentLeft>
+			</Bar>
+		</customHeader>
+		<content>
+			<IconTabBar id="actionTabBar">
+				<items>
+					<IconTabFilter icon="./images/icons/Water.png" key="water" text="Water">
+						<VBox class="wateringFlexTable">
+							<Table inset="true" width="auto" mode="None" items="{path:'ChartModel>/wateringLogData'}">
+								<columns>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" visible="{= ${device>/system/phone} ? true : false}"/>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Watered On" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Amount" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Ph Level" design="Bold"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<cells>
+											<Text text="" visible="{= ${device>/system/phone} ? true : false}"/>
+											<Text text="{path:'ChartModel>NBSDT',type:'sap.ui.model.type.Date',formatOptions:{pattern:'MMM dd, YYYY'}}"/>
+											<!--<Text text="{parts:[{path:'ChartModel>NMNGE'},{path:'ChartModel>NEHTN'}],formatter:'.formatter.formatQtyUnit'}"/>-->
+											<Text text="{ChartModel>NMNGE}"/>
+											<Text text="{ChartModel>NPWRT}"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</VBox>
+					</IconTabFilter>
+					<IconTabFilter icon="./images/icons/Nutrients.png" key="feed" text="Feed">
+						<VBox class="wateringFlexTable">
+							<Table inset="true" width="auto" mode="None" items="{path:'ChartModel>/feedLogData'}">
+								<columns>
+										<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" visible="{= ${device>/system/phone} ? true : false}"/>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Feed On" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Feed Type" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Nutrient" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Amount" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Solvent" design="Bold"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<cells>
+												<Text visible="{= ${device>/system/phone} ? true : false}"/>
+											<Text text="{path:'ChartModel>NBSDT',type:'sap.ui.model.type.Date',formatOptions:{pattern:'MMM dd, YYYY'}}"/>
+											<Text text="{ChartModel>NFDTP}"/>
+											<Text text="{ChartModel>NNTRT}"/>
+											<Text text="{ChartModel>NMNGE}"/>
+											<Text text="{ChartModel>NSLQT}"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</VBox>
+					</IconTabFilter>
+					<IconTabFilter icon="./images/icons/Treat.png" key="treat" text="Treat">
+						<VBox class="wateringFlexTable">
+							<Table inset="true" width="auto" mode="None" items="{path:'ChartModel>/treatLogData'}">
+								<columns>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" visible="{= ${device>/system/phone} ? true : false}"/>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Treated On" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Treat Type" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Repellent Name" design="Bold"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+										<Label text="Amount" design="Bold"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<cells>
+												<Text visible="{= ${device>/system/phone} ? true : false}"/>
+											<Text text="{path:'ChartModel>NBSDT',type:'sap.ui.model.type.Date',formatOptions:{pattern:'MMM dd, YYYY'}}"/>
+											<Text text="{ChartModel>NTRTP}"/>
+											<Text text="{ChartModel>NRPNM}"/>
+											<Text text="{ChartModel>NMNGE}"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</VBox>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</content>
+		<buttons>
+			<Button type="Reject" text="Close" press="onPlantLogClose"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

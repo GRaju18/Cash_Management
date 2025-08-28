@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog id="changeItemMETRC" contentWidth="80%" class="sapUiSizeCompact" stretch="{device>/system/phone}" draggable="true"
+		title="Replace Tag" busy="{jsonModel>/busy}">
+		<content>
+			<Table width="auto" id="updateMTagTable" inset="false" mode="None" items="{ path: 'jsonModel>/updateMTagData'}" class="sapUiTinyMargin"
+				fixedLayout="false">
+				<columns>
+					<Column width="50%">
+						<Label text="Tag" design="Bold"/>
+					</Column>
+					<Column width="50%">
+						<Label text="New Tag" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{jsonModel>BatchNum}"/>
+							<Input placeholder="Enter Tag"  valueStateText="{jsonModel>tagStatusTxt}" valueState="{jsonModel>statusTag}"
+								change="validateTag" value="{jsonModel>newTag}"></Input>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<beginButton>
+			<Button type="Emphasized" text="{i18n>Update}" press="onConfirmReplaceTag"></Button>
+		</beginButton>
+		<endButton>
+			<Button type="Transparent" text="{i18n>Cancel}" press="onCancelMETRCTag"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

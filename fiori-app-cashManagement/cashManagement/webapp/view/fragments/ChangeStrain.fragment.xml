@@ -1,0 +1,77 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog id="changeItemMETRC" contentWidth="80%" class="sapUiSizeCompact" stretch="{device>/system/phone}" draggable="true"
+		title="Change Strains">
+		<content>
+			<FlexBox class="sapUiTinyMargin" width="100%" justifyContent="Center">
+				<FlexBox direction="Column">
+					<FlexBox>
+						<FlexBox alignItems="Center" class="sapUiTinyMargin">
+							<Label text="New Item" required="false" class="sapUiTinyMarginEnd"/>
+							<Input width="20rem" placeholder="Enter Item" showSuggestion="true" valueStateText="{jsonModel>ITEMTXT}" valueState="{jsonModel>STATUSITEM}"
+								liveChange="validateItem" showTableSuggestionValueHelp="false" suggestionRows="{/changeItemsdropdownData}"
+								suggestionItemSelected="onSuggestionItemSelected" value="{jsonModel>/temItemName}">
+								<suggestionColumns>
+									<Column>
+										<Label text="Strain Name"/>
+									</Column>
+								</suggestionColumns>
+								<suggestionRows>
+									<ColumnListItem>
+										<Text text="{U_NSTNM}" wrapping="true" textAlign="Initial"/>
+									</ColumnListItem>
+								</suggestionRows>
+							</Input>
+						</FlexBox>
+						<FlexBox alignItems="Center">
+							<Button type="Emphasized" text="Apply" press="onChangeStrainTemApply" class="sapUiSmallMarginBeginEnd"/>
+						</FlexBox>
+					</FlexBox>
+				</FlexBox>
+			</FlexBox>
+			<Table width="auto" id="changeItemMETRCTable" inset="false" mode="None" items="{ path: 'jsonModel>/changeItemsData'}"
+				class="sapUiTinyMargin" fixedLayout="false">
+				<columns>
+					<Column width="25%">
+						<Label text="METRC UID" design="Bold"/>
+					</Column>
+					<Column width="30%">
+						<Label text="Strain" design="Bold"/>
+					</Column>
+					<Column width="35%">
+						<Label text="New Strain" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{jsonModel>BatchNum}"/>
+							<Text text="{jsonModel>StrainName}"/>
+							<Input placeholder="Enter Item" showSuggestion="true" valueStateText="{jsonModel>ITEMTXT}" valueState="{jsonModel>STATUSITEM}"
+								liveChange="validateItem" showTableSuggestionValueHelp="false" suggestionRows="{/changeItemsdropdownData}"
+								suggestionItemSelected="onSuggestionItemSelected" value="{jsonModel>newItemName}">
+								<suggestionColumns>
+									<Column>
+										<Label text="Strain Name"/>
+									</Column>
+								</suggestionColumns>
+								<suggestionRows>
+									<ColumnListItem>
+										<Text text="{U_NSTNM}" wrapping="true" textAlign="Initial"/>
+									</ColumnListItem>
+								</suggestionRows>
+							</Input>
+							<!--<Input value="{jsonModel>newItemName}" liveChange="validateItem" showValueHelp="true" placeholder="Enter Item" valueState="{jsonModel>STATUSITEM}"-->
+							<!--	valueStateText="{jsonModel>ITEMTXT}" valueHelpRequest="valueHelpRequestDialog"></Input>-->
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<beginButton>
+			<Button type="Emphasized" text="{i18n>Update}" press="onMETRCConfirmChangeItem"></Button>
+		</beginButton>
+		<endButton>
+			<Button type="Transparent" text="{i18n>Cancel}" press="onChangeItemCloseMETRC"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

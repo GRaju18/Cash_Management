@@ -1,0 +1,68 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table" xmlns:uxap="sap.uxap"
+	xmlns:mvc="sap.ui.core.mvc" height="100%" xmlns:barcode="com.9b.cashManagement.control" xmlns:f="sap.ui.layout.form">
+	<Dialog class="sapUiSizeCompact" contentWidth="{= ${device>/system/desktop} ? '32rem':'auto'}" title="Harvest" horizontalScrolling="false" draggable="true">
+		<uxap:ObjectPageLayout showHeaderContent="{= !!${jsonModel>/showHeaderHarvest} }" busy="{jsonModel>/showBusy}"
+			toggleHeaderOnTitleClick="{= !!${jsonModel>/showHeaderHarvest} }" upperCaseAnchorBar="false">
+			<uxap:headerTitle>
+				<uxap:ObjectPageDynamicHeaderTitle>
+					<uxap:heading>
+						<Input id="barcode" submit="onBegTagBarcodeScan" width="16rem" placeholder="Scan Tag"/>
+					</uxap:heading>
+				</uxap:ObjectPageDynamicHeaderTitle>
+			</uxap:headerTitle>
+			<uxap:sections>
+				<uxap:ObjectPageSection showTitle="false" visible="{jsonModel>/showMessagePage}">
+					<uxap:subSections>
+						<uxap:ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
+							<MessagePage showHeader="false" icon="sap-icon://tags" text="{jsonModel>/scanTextHarvest}" description=""/>
+						</uxap:ObjectPageSubSection>
+					</uxap:subSections>
+				</uxap:ObjectPageSection>
+				<uxap:ObjectPageSection showTitle="false" visible="{= !${jsonModel>/showMessagePage}}">
+					<uxap:subSections>
+						<uxap:ObjectPageSubSection>
+							<HBox>
+								<VBox width="15rem" height="12rem" justifyContent="SpaceBetween">
+									<Label text="Wet Weight(g):" design="Bold" required="true"/>
+									<TextArea class="weightInput" width="12rem" rows="1" id="wWeight" liveChange="onWtChange"/>
+									<Label design="Bold" text="Drying Location" required="true"/>
+									<Select id="sRoom" width="12rem" items="{path: 'jsonModel>/harvestLicenseList'}" busy="{jsonModel>/hLocationBusy}" forceSelection="false">
+										<items>
+											<core:Item key="{jsonModel>WarehouseCode}" text="{jsonModel>WarehouseName}"/>
+										</items>
+									</Select>
+								</VBox>
+								<VBox width="15rem" height="12.5rem" justifyContent="SpaceBetween" class="sapUiMediumMarginBegin">
+									<VBox height="3rem">
+										<Label design="Bold" text="Plant ID"/>
+										<Text text="{jsonModel>/scannedTag/U_NPLID}"/>
+									</VBox>
+									<VBox height="3rem">
+										<Label design="Bold" text="Harvest Date"/>
+										<Text
+											text="{path:'jsonModel>/scannedTag/U_NEFDT' ,type:'sap.ui.model.type.Date',formatOptions:{pattern:'MM-dd-YYYY',strictParsing: true , UTC: true}}"
+											wrapping="true"/>
+									</VBox>
+									<VBox height="3rem">
+										<Label design="Bold" text="Strain"/>
+										<Text text="{jsonModel>/scannedTag/U_NSTNM}"/>
+									</VBox>
+									<VBox height="3rem">
+										<Label design="Bold" text="Location"/>
+										<Text text="{jsonModel>/scannedTag/U_NLCNM}"/>
+									</VBox>
+								</VBox>
+							</HBox>
+						</uxap:ObjectPageSubSection>
+					</uxap:subSections>
+				</uxap:ObjectPageSection>
+			</uxap:sections>
+		</uxap:ObjectPageLayout>
+		<beginButton>
+			<Button id="seachBtn" text="Harvest Plants" press="postHarvestData" type="Emphasized"></Button>
+		</beginButton>
+		<endButton>
+			<Button text="Close" type="Transparent" press="onHarvestClose" width="5rem"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>
