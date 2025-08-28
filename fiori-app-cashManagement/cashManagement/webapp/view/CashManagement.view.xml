@@ -1,114 +1,160 @@
-<mvc:View controllerName="com.9b.cashManagement.controller.CashManagement" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f"
-	xmlns:commons="sap.suite.ui.commons" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data"
-	xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:microchart="sap.suite.ui.microchart" xmlns:table="sap.ui.table"
-	xmlns:viz="sap.viz.ui5.controls" xmlns:grid="sap.ui.layout.cssgrid" xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" busy="{jsonModel>/busyView}">
-	<f:DynamicPage id="dynamicPageId" showFooter="true" class="sapUiSizeCompact">
-		<f:title>
-			<f:DynamicPageTitle>
-				<f:actions>
-					<!--<Title text="{i18n>Location}"></Title>-->
-					<!--<SearchField width="18rem" id="locDropDown" search="onSearchLicense" enableSuggestions="true" suggestionItems="{jsonModel>/licenseList}"-->
-					<!--	suggest="onSuggestLocation" value="{jsonModel>/selectedLocationDesc}">-->
-					<!--	<SuggestionItem text="{jsonModel>BinCode} - {jsonModel>U_MetrcLicense}"/>-->
-					<!--</SearchField>-->
-					<!--<Button text="Scan" icon="sap-icon://bar-code" press="onPlantBarcodeScan"/>-->
-					<Button icon="sap-icon://refresh" press="loadLicenseData"/>
-				</f:actions>
-				<f:navigationActions>
-					<!--<tnt:InfoLabel class="metrcItem" text="{jsonModel>/METRCText}" colorScheme="{jsonModel>/METRCColorCode}" visible="{jsonModel>/MetrcOnOff}"/>-->
-					<!--<tnt:InfoLabel class="metrcItem" text="{jsonModel>/METRCKey}" colorScheme="{jsonModel>/METRCColorKey}" visible="{jsonModel>/MetrcOnOff}"/>-->
-					<Button text="{jsonModel>/refreshText}" type="Transparent" enabled="false" class="lastUpdate" width="13rem"/>
-				</f:navigationActions>
-			</f:DynamicPageTitle>
-		</f:title>
-		<f:content>
-			<FlexBox height="100%" class="fullHeight" direction="Column">
-				<FlexBox height="100%" class="fullHeight" direction="Column">
-					<table:Table class="uiTableTable" id="cashManagementTable" selectionMode="MultiToggle" rows="{path:'jsonModel>/cashManagementData'}"
-						visibleRowCountMode="Auto" rowSelectionChange="handleRowSelection" filter="customFilter" cellClick="cellClick">
-						<table:extension>
-							<OverflowToolbar>
-								<Title class="tableTitle" id="tableHeader" text="{i18n>Items}"/>
-								<ToolbarSpacer/>
-								<MultiInput width="30rem" placeholder="Search" tokenUpdate="tokenUpdateMultiInput" submit="onSubmitMultiInput" showValueHelp="false"
-									liveChange="onChangeMultiInput" id="searchFieldTable" enableMultiLineMode="true"/>
-								<!--<Button text="{i18n>ClearAllFilters}" press="clearAllFilters"/>-->
-								<Text class="sapMTBSeparator"/>
-								<DateRangeSelection id="CashRangePicker" displayFormat="MM-dd-yyyy" dateValue="{jsonModel>/oStartDate}"
-									secondDateValue="{jsonModel>/oEndDate}" width="17rem"/>
-								<HBox alignItems="Center" class="sapUiTinyMarginBegin">
-									<Text text="Store:" class="sapUiTinyMarginEnd"/>
-									<SearchField width="18rem" id="licenseDropDown" search="onSearchLicense" enableSuggestions="true"
-										suggestionItems="{jsonModel>/snblicenseData}" suggest="onSuggestLicense" value="{jsonModel>/SelectLicenseValue}">
-										<SuggestionItem text="{jsonModel>Name} - {jsonModel>Code}"/>
-									</SearchField>
-									<!--<ComboBox  selectedKey="{jsonModel>/temSelectLicense}" items="{jsonModel>/snblicenseData}" busy="{jsonModel>/mComboBoxBusy}">-->
-									<!--	<core:Item key="{jsonModel>Name}" text="{jsonModel>Name}" />-->
-									<!--</ComboBox>-->
-								</HBox>
-								<HBox alignItems="Center" class="sapUiTinyMarginBegin">
-									<Text text="Register:" class="sapUiTinyMarginEnd"/>
-									<SearchField width="18rem" id="registerDropDown" search="onSearchRegister" enableSuggestions="true"
-										suggestionItems="{jsonModel>/registerCompressData}" suggest="onSuggestRegister" value="{jsonModel>/temSelectRegister}">
-										<SuggestionItem text="{jsonModel>U_REGISTERID}"/>
-									</SearchField>
-									<!--<ComboBox  selectedKey="{jsonModel>/temSelectRegister}" items="{jsonModel>/registerCompressData}" busy="{jsonModel>/mComboBoxBusy}">-->
-									<!--	<core:Item key="{jsonModel>U_REGISTERID}" text="{jsonModel>U_REGISTERID}" />-->
-									<!--</ComboBox>-->
-								</HBox>
-								<Button text="Go" press="loadFilterBasedCashManagement" type="Emphasized"/>
-								<Button text="Clear All Filters" press="clearAllFilters" type="Ghost"/>
-							</OverflowToolbar>
-						</table:extension>
-						<table:columns>
-							<table:Column sortProperty="formatU_DATE" filterProperty="formatU_DATE" width="17%">
-								<Label text="Date" design="Bold"/>
-								<table:template>
-									<Text text="{jsonModel>formatU_DATE} , {jsonModel>U_TIME} "/>
-								</table:template>
-							</table:Column>
-							<table:Column sortProperty="U_REGISTERID" filterProperty="U_REGISTERID" width="15%">
-								<Label text="Register" design="Bold"/>
-								<table:template>
-									<Text text="{jsonModel>U_REGISTERID}"/>
-								</table:template>
-							</table:Column>
-							<table:Column sortProperty="U_SALESEMPLOYEE" filterProperty="U_SALESEMPLOYEE" width="17%">
-								<Label text="User" design="Bold"/>
-								<table:template>
-									<Text text="{jsonModel>U_SALESEMPLOYEE}"/>
-								</table:template>
-							</table:Column>
-							<table:Column id="U_TRANSACTIONREASON" sortProperty="U_TRANSACTIONREASON" filterProperty="U_TRANSACTIONREASON" tooltip="TRANSACTION REASON">
-								<Label text="Reason" design="Bold"/>
-								<table:template>
-									<VBox>
-										<Text text="{jsonModel>U_TRANSACTIONTYPE}"/>
-										<Text text="{jsonModel>U_TRANSACTIONREASON}" class="bigText"/>
-									</VBox>
-								</table:template>
-							</table:Column>
-							<table:Column sortProperty="U_AMOUNT" filterProperty="U_AMOUNT" width="12%">
-								<Label text="Amount" design="Bold"/>
-								<table:template>
-									<tnt:InfoLabel text="{jsonModel>CASHINICON} {jsonModel>/POSCurrency} {jsonModel>U_AMOUNT}" colorScheme="{jsonModel>infoLable}"/>
-								</table:template>
-							</table:Column>
-						</table:columns>
-					</table:Table>
-				</FlexBox>
-			</FlexBox>
-		</f:content>
-		<f:footer>
-			<Bar>
-				<contentLeft>
-					<!--<Button id="resPop" icon="sap-icon://information" press="handleOpenPopOver" ariaHasPopup="Dialog"/>-->
-					<Text text="{jsonModel>/versionInfo}"/>
-				</contentLeft>
-				<contentRight>
-					<tnt:InfoLabel text="Total Cash: {jsonModel>/totalCashManageInput}" colorScheme="8" class="sapUiTinyMarginTop"/>
-				</contentRight>
-			</Bar>
-		</f:footer>
-	</f:DynamicPage>
+<mvc:View controllerName="com.9b.cashManagement.controller.CashManagement"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:microchart="sap.suite.ui.microchart"
+    xmlns:table="sap.ui.table"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns:l="sap.ui.layout"
+    xmlns:tnt="sap.tnt"
+    xmlns:fb="sap.ui.comp.filterbar"
+    busy="{jsonModel>/busyView}">
+
+    <f:DynamicPage id="dynamicPageId" showFooter="true" class="sapUiSizeCompact">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:actions>
+                    <Button icon="sap-icon://refresh" press="loadLicenseData"/>
+                </f:actions>
+                <f:navigationActions>
+                    <Button text="{jsonModel>/refreshText}" type="Transparent" enabled="false" class="lastUpdate" width="13rem"/>
+                </f:navigationActions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false"
+                        search=".loadFilterBasedCashManagement"
+                        filterChange=".onFilterChange"
+                        afterVariantLoad=".onAfterVariantLoad">
+                        <fb:filterGroupItems>
+
+                            <fb:FilterGroupItem name="Date Range" label="Date Range" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <DateRangeSelection id="CashRangePicker" displayFormat="MM-dd-yyyy"
+                                        dateValue="{jsonModel>/oStartDate}"
+                                        secondDateValue="{jsonModel>/oEndDate}" width="17rem"/>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+
+                            <fb:FilterGroupItem name="Store" label="Store" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <SearchField width="18rem" id="licenseDropDown"
+                                        search="onSearchLicense" enableSuggestions="true"
+                                        suggestionItems="{jsonModel>/snblicenseData}"
+                                        suggest="onSuggestLicense"
+                                        value="{jsonModel>/SelectLicenseValue}">
+                                        <SuggestionItem text="{jsonModel>Name} - {jsonModel>Code}"/>
+                                    </SearchField>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+
+                            <fb:FilterGroupItem name="Register" label="Register" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <SearchField width="18rem" id="registerDropDown"
+                                        search="onSearchRegister" enableSuggestions="true"
+                                        suggestionItems="{jsonModel>/registerCompressData}"
+                                        suggest="onSuggestRegister"
+                                        value="{jsonModel>/temSelectRegister}">
+                                        <SuggestionItem text="{jsonModel>U_REGISTERID}"/>
+                                    </SearchField>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <FlexBox height="100%" class="fullHeight" direction="Column">
+                <table:Table id="cashManagementTable" class="uiTableTable"
+                    selectionMode="MultiToggle"
+                    rows="{path:'jsonModel>/cashManagementData'}"
+                    visibleRowCountMode="Auto"
+                    rowSelectionChange="handleRowSelection"
+                    filter="customFilter"
+                    cellClick="cellClick">
+
+                    <table:extension>
+                        <OverflowToolbar>
+                            <Title class="tableTitle" id="tableHeader" text="Transactions"/>
+                            <ToolbarSpacer/>
+                            <MultiInput width="41rem" placeholder="Search"
+                                tokenUpdate="tokenUpdateMultiInput"
+                                submit="onSubmitMultiInput"
+                                liveChange="onChangeMultiInput"
+                                id="searchFieldTable"
+                                showValueHelp="false"
+                                enableMultiLineMode="true"/>
+                            <Text class="sapMTBSeparator"/>
+                            <Button text="Clear All Filters" press="clearAllFilters" type="Ghost"/>
+                        </OverflowToolbar>
+                    </table:extension>
+
+                    <table:columns>
+
+                        <table:Column sortProperty="formatU_DATE" filterProperty="formatU_DATE" width="17%">
+                            <Label text="Date" design="Bold"/>
+                            <table:template>
+                                <Text text="{jsonModel>formatU_DATE} , {jsonModel>U_TIME}"/>
+                            </table:template>
+                        </table:Column>
+
+                        <table:Column sortProperty="U_REGISTERID" filterProperty="U_REGISTERID" width="15%">
+                            <Label text="Register" design="Bold"/>
+                            <table:template>
+                                <Text text="{jsonModel>U_REGISTERID}"/>
+                            </table:template>
+                        </table:Column>
+
+                        <table:Column sortProperty="U_SALESEMPLOYEE" filterProperty="U_SALESEMPLOYEE" width="17%">
+                            <Label text="User" design="Bold"/>
+                            <table:template>
+                                <Text text="{jsonModel>U_SALESEMPLOYEE}"/>
+                            </table:template>
+                        </table:Column>
+
+                        <table:Column id="U_TRANSACTIONREASON" sortProperty="U_TRANSACTIONREASON" filterProperty="U_TRANSACTIONREASON" tooltip="TRANSACTION REASON">
+                            <Label text="Reason" design="Bold"/>
+                            <table:template>
+                                <VBox>
+                                    <Text text="{jsonModel>U_TRANSACTIONTYPE}"/>
+                                    <Text text="{jsonModel>U_TRANSACTIONREASON}" class="bigText"/>
+                                </VBox>
+                            </table:template>
+                        </table:Column>
+
+                        <table:Column sortProperty="U_AMOUNT" filterProperty="U_AMOUNT" width="12%">
+                            <Label text="Amount" design="Bold"/>
+                            <table:template>
+                                <tnt:InfoLabel text="{jsonModel>CASHINICON} ${jsonModel>U_AMOUNT}" colorScheme="{jsonModel>infoLable}"/>
+                            </table:template>
+                        </table:Column>
+
+                    </table:columns>
+                </table:Table>
+            </FlexBox>
+        </f:content>
+
+        <f:footer>
+            <Bar>
+                <contentLeft>
+                    <Text text="{jsonModel>/versionInfo}"/>
+                </contentLeft>
+                <contentRight>
+                    <Label design="Bold" text="Total Cash ($): {jsonModel>/totalCashManageInput}" class="sapUiTinyMarginTop sapUiLargeMarginEnd"/>
+                </contentRight>
+            </Bar>
+        </f:footer>
+
+    </f:DynamicPage>
 </mvc:View>

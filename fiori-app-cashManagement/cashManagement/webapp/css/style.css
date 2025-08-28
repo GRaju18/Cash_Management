@@ -105,6 +105,13 @@
     background: #e4ecf5 !important;
 }
 
+.bigText {
+    font-size: 0.88rem;
+    /* Adjust as needed */
+    color: gray !important;
+    margin-top: 2px
+}
+
 .lastUpdate {
     opacity: 1;
 }

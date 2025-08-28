@@ -20,8 +20,8 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			var jsonModel = this.getOwnerComponent().getModel("jsonModel");
-			this.getAppConfigData();
-			this.hanldeMessageDialog();
+			// this.getAppConfigData();
+			// this.hanldeMessageDialog();
 			var cashManagementTable = this.getView().byId("cashManagementTable");
 			var tableHeader = this.byId("tableHeader");
 			cashManagementTable.addEventDelegate({
@@ -31,7 +31,7 @@ sap.ui.define([
 						var oSource = oEvent.getSource();
 						var count = oSource.iLength; //Will fetch you the filtered rows length
 						var totalCount = oSource.oList.length;
-						tableHeader.setText("Items (" + count + "/" + totalCount + ")");
+						tableHeader.setText("Transactions (" + count + "/" + totalCount + ")");
 					});
 				}
 			}, cashManagementTable);
@@ -60,8 +60,9 @@ sap.ui.define([
 		loadLicenseData: function () {
 			var that = this;
 			var jsonModel = this.getOwnerComponent().getModel("jsonModel");
+			var filter="?$filter=U_NLCTP eq 'Retail'";
 
-			this.readServiecLayer("/b1s/v2/U_SNBLIC", function (data) {
+			this.readServiecLayer("/b1s/v2/U_SNBLIC" + filter, function (data) {
 
 				data.value.sort((a, b) => a.Name.localeCompare(b.Name));
 				jsonModel.setProperty("/snblicenseData", data.value);
@@ -105,7 +106,7 @@ sap.ui.define([
 				jsonModel.setProperty("/oEndDate", endOfDay);
 			}
 			var filers = "?$filter=U_DATE ge '" + fStartDate + "' and U_DATE le '" + fEndDate + "'";
-			var orderBy = "&$orderby=U_TIME desc";
+			var orderBy = "&$orderby=U_TIME asc";
 			var date = new Date();
 			var dateFormat = DateFormat.getDateInstance({
 				pattern: "yyyy-MM-dd'T'HH:mm:ss",
@@ -135,7 +136,7 @@ sap.ui.define([
 			var that = this;
 			that.byId("dynamicPageId").setBusy(true);
 			var filers = "";
-			var orderBy = "&$orderby=U_TIME desc";
+			var orderBy = "&$orderby=U_TIME asc";
 			if (!clearRegister) {
 				clearRegister = false;
 			}
@@ -201,11 +202,12 @@ sap.ui.define([
 				if (uniqueById.length > 0) {
 					uniqueById.sort((a, b) => a.U_REGISTERID ?.localeCompare(b.U_REGISTERID));
 					jsonModel.setProperty("/registerCompressData", uniqueById);
-					jsonModel.setProperty("/temSelectRegister", uniqueById[0].U_REGISTERID);
 					
 					var previousData = jsonModel.getProperty("/temSelectRegister");
 					if (!previousData) {
 						jsonModel.setProperty("/temSelectRegister", "");
+					} else {
+						jsonModel.setProperty("/temSelectRegister", uniqueById[0].U_REGISTERID);
 					}
 				} else {
 					var previousData = jsonModel.getProperty("/temSelectRegister");
