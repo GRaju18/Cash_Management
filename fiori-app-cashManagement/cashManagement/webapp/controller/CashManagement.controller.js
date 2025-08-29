@@ -60,8 +60,10 @@ sap.ui.define([
 		loadLicenseData: function () {
 			var that = this;
 			var jsonModel = this.getOwnerComponent().getModel("jsonModel");
+				jsonModel.setProperty("/oStartDate", new Date());
+				jsonModel.setProperty("/oEndDate", new Date());
+				
 			var filter="?$filter=U_NLCTP eq 'Retail'";
-
 			this.readServiecLayer("/b1s/v2/U_SNBLIC" + filter, function (data) {
 
 				data.value.sort((a, b) => a.Name.localeCompare(b.Name));
@@ -120,11 +122,12 @@ sap.ui.define([
 				);
 				uniqueById.sort((a, b) => a.U_REGISTERID ?.localeCompare(b.U_REGISTERID));
 				jsonModel.setProperty("/registerCompressData", uniqueById);
-				if (uniqueById.length > 0) {
-					jsonModel.setProperty("/temSelectRegister", uniqueById[0].U_REGISTERID);
-				} else {
-					jsonModel.setProperty("/temSelectRegister", "");
-				}
+				jsonModel.setProperty("/temSelectRegister", "");
+				// if (uniqueById.length > 0) {
+				// 	jsonModel.setProperty("/temSelectRegister", uniqueById[0].U_REGISTERID);
+				// } else {
+					
+				// }
 
 				that.loadFilterBasedCashManagement(false);
 
@@ -277,6 +280,42 @@ sap.ui.define([
 
 			});
 
+		},
+		
+		getRegistersFromDateRange: function(){
+			var jsonModel = this.getOwnerComponent().getModel("jsonModel");
+			var that = this;
+			
+			var temSelectRegister = jsonModel.getProperty("/temSelectRegister");
+			var temSelectLicense = jsonModel.getProperty("/temSelectLicense");
+
+			var oStartDate = jsonModel.getProperty("/oStartDate");
+			var oEndDate = jsonModel.getProperty("/oEndDate");
+			var dateFormat = DateFormat.getDateTimeInstance({
+				pattern: "yyyy-MM-ddTHH:mm:ss'Z'",
+				UTC: false,
+			});
+			var dateFormatInside = DateFormat.getDateTimeInstance({
+				pattern: "yyyy-MM-dd",
+				UTC: false,
+			});
+			var fStartDate = dateFormat.format(oStartDate);
+			var fEndDate = dateFormat.format(oEndDate);
+			var filers = "?$filter=U_DATE ge '" + fStartDate + "' and U_DATE le '" + fEndDate + "'";
+			
+				this.readServiecLayer("/b1s/v2/CASHREGISTER" + filers, function (data) {
+				const uniqueById = data.value.filter((obj, index, self) =>
+					index === self.findIndex((o) => o.U_REGISTERID === obj.U_REGISTERID)
+				);
+
+				if (uniqueById.length > 0) {
+					uniqueById.sort((a, b) => a.U_REGISTERID ?.localeCompare(b.U_REGISTERID));
+					jsonModel.setProperty("/registerCompressData", uniqueById);
+				}
+				
+				});
+			
+			
 		},
 
 		clearAllFilters: function () {
